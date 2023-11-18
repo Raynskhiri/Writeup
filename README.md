@@ -6,7 +6,7 @@ This writeup will guide you to solve the tasks:
 - [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
 - [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
 
-- [Server Side Template Injection](#server-side-template-injection-ssti-exploitation-server-side-template-injection)
+### Server Side Template Injection
 
 ### Confirmation of Jinja2 Usage
 
@@ -28,7 +28,7 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
 
-   ![Payload](/1.png)
+   <img src="" alt="Payload 1" width="400" height="300">
 
    *Description: `{{7*7}}`*
 
