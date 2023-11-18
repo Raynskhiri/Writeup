@@ -2,11 +2,11 @@
 
 This writeup will guide you to solve the tasks:
 
-- Server Side Template Injection
-- Local file inclusion 0 (LFI0)
-- Local file inclusion 1 (LFI1)
+- [Server Side Template Injection](#server-side-template-injection)
+- [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
+- [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
 
-## Server Side Template Injection (SSTI) Exploitation
+## Server Side Template Injection (SSTI) Exploitation (#server-side-template-injection)
 
 ### Confirmation of Jinja2 Usage
 
