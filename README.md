@@ -6,7 +6,7 @@ This writeup will guide you to solve the tasks:
 - [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
 - [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
 
-### Server Side Template Injection
+## Server Side Template Injection
 
 ### Confirmation of Jinja2 Usage
 
