@@ -76,4 +76,4 @@ After confirming the presence of SSTI in the web application, the next step is t
 
    - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
    
-    <img src="8.png" alt="Payload 1" width="400" height="300">
+    <img src="8.png" alt="Payload 1" width="600" height="400">
