@@ -1,6 +1,6 @@
 # SecuriNets ISI Friendly CTF 2023-2024
 
-This Writeup will guide to solve the tasks :
+This writeup will guide you to solve the tasks:
 
 - Server Side Template Injection
 - Local file inclusion 0 (LFI0)
@@ -28,31 +28,11 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
 
-   ![Payload](/1.png)
+   ![Payload](/3.png)
 
    *Description: `{{7*7}}`*
 
 2. **Test Result:** The application responds with the output of the '{{7*7}}' command.
-
-   ![Result](/2Capture%20d'écran%202023-11-18%20220633.png)
-
-These examples further reinforce the likelihood of Jinja2 usage and provide a starting point for crafting specific SSTI payloads tailored to this template engine.
-
-### SSTI Exploit for Remote Code Execution (RCE)
-
-After confirming the presence of SSTI in the web application, the next step is to exploit it for Remote Code Execution (RCE). One common payload for achieving RCE in Jinja2 is as follows:
-
-```jinja
-{{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}
-```
-
-1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
-
-   ![Payload]!(/3.png)
-
-   *Description: {{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}*
-
-2. **Test Result:** The application responds with the output of the 'id' command.
 
    ![Result](/4.png)
 
@@ -61,7 +41,7 @@ After confirming the presence of SSTI in the web application, the next step is t
 3. **Directory Listing**
    - **Payload:** Modify the payload to list the contents of the current directory using `ls`.
 
-     ![Payload]!(/5.png)
+     ![Payload](/5.png)
 
    - **Test Result:** Execute the payload and observe the result to see the files and directories in the current location.
 
@@ -73,9 +53,9 @@ After confirming the presence of SSTI in the web application, the next step is t
      ```jinja
      {{ self.__init__.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read() }}
      ```
-    ![Payload]!(/7.png)
 
-   - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file : `Securinets{55t1_D0N3}`.
+    ![Payload](/7.png)
+
+   - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
    
-    ![Result]!(/8.png)
-   
+    ![Result](/8.png)
