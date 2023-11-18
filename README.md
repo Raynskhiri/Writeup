@@ -6,7 +6,7 @@ This writeup will guide you to solve the tasks:
 - [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
 - [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
 
-## Server Side Template Injection (SSTI) Exploitation {#server-side-template-injection}
+- [Server Side Template Injection](#server-side-template-injection-ssti-exploitation-server-side-template-injection)
 
 ### Confirmation of Jinja2 Usage
 
@@ -46,7 +46,7 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
 
-   ![Payload]!(/3.png)
+   ![Payload](/3.png)
    
 3. **Test Result:** The application responds with the output of the 'id' command.
 
