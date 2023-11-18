@@ -28,13 +28,13 @@ In your research, you've uncovered some basic examples of Jinja2 SSTI, including
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
 
-   <img src="" alt="Payload 1" width="400" height="300">
+<img src="img/1.png" alt="Payload 1" width="600" height="400">
 
    *Description: `{{7*7}}`*
 
 2. **Test Result:** The application responds with the output of the '{{7*7}}' command.
 
-   ![Result](/2.png)
+<img src="img/2.png" alt="Payload 1" width="600" height="400">
 
 ### SSTI Exploit for Remote Code Execution (RCE)
 
@@ -46,24 +46,22 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
 
-   ![Payload](/3.png)
-   
+<img src="img/3.png" alt="Payload 1" width="600" height="400">
+
 3. **Test Result:** The application responds with the output of the 'id' command.
 
-   ![Result](/4.png)
+<img src="img/4.png" alt="Payload 1" width="600" height="400">
 
    *Description: Confirm that the application responds with the output of the 'id' command, indicating successful SSTI execution.*
-
-
 
 4. **Directory Listing**
    - **Payload:** Modify the payload to list the contents of the current directory using `ls`.
 
-     ![Payload](/5.png)
+<img src="img/5.png" alt="Payload 1" width="600" height="400">
 
-   - **Test Result:** Execute the payload and observe the result to see the files and directories in the current location.
+- **Test Result:** Execute the payload and observe the result to see the files and directories in the current location.
 
-     ![Result](/6.png)
+<img src="img/6.png" alt="Payload 1" width="600" height="400">
 
 5. **Read Flag Contents**
    - **Payload:** Modify the payload to cat the contents of `flag.txt`.
@@ -72,8 +70,8 @@ After confirming the presence of SSTI in the web application, the next step is t
      {{ self.__init__.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read() }}
      ```
 
-    ![Payload](/7.png)
+<img src="img/7.png" alt="Payload 1" width="600" height="400">
 
-   - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
-   
-    <img src="8.png" alt="Payload 1" width="600" height="400">
+- **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
+
+<img src="img/8.png" alt="Payload 1" width="600" height="400">
