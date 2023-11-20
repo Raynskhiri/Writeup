@@ -78,7 +78,7 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 ## Local File Inclusion (LFI0)
 
-### Confirmation of Local File Inclusion (#local-file-inclusion-0-lfi0)
+### Confirmation of Local File Inclusion 
 
  Confirmation of Local File Inclusion (LFI) is a crucial step in identifying and fixing vulnerabilities in web applications that use PHP. In LFI, attackers 
  exploit improper input validation to include unauthorized files. To confirm LFI, they might use traversal sequences like "../" or null bytes (%00) to navigate 
