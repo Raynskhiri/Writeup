@@ -80,9 +80,41 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 ### Confirmation of Local File Inclusion
 
-The title of this challenge, "Server Side Template Injection," coupled with the description, strongly suggests the use of the Jinja2 template engine in the web application.
+Confirmation of Local File Inclusion (LFI) is a crucial step in identifying and fixing vulnerabilities in web applications that use PHP. In LFI, attackers exploit improper input validation to include unauthorized files. To confirm LFI, they might use traversal sequences like "../" or null bytes (%00) to navigate directories or terminate file paths. This helps them gather information about the server environment and potentially execute malicious code. Prevention involves robust input validation, file path whitelisting, and regular software updates. Addressing LFI promptly is essential for maintaining web application security.
 
-### What is a Local File Inclusion (LFI) vulnerability?
+### Supporting Argument
 
-> Local File Inclusion (LFI) allows an attacker to include files on a server through the web browser. This vulnerability exists when a web application includes a file without correctly sanitising the input, allowing and attacker to manipulate the input and inject path traversal characters and include other files from the web server.
+> Consider a PHP script that includes a file based on user input. If proper sanitization is not in place, an attacker could manipulate the page parameter to include local or remote files, leading to unauthorized access or code execution.
 
+1. **Identify Vulnerable Script:**
+
+```
+<?php
+$file = $_GET['page'];
+include($file);
+?>
+```
+
+2. **Exploit Directory Traversal:**
+
+In the following examples we include the **/etc/passwd** file, check the Directory & Path Traversal chapter for more interesting files.
+
+```plaintext
+http://example.com/index.php?page=../../../etc/passwd
+```
+
+3. **include 'flag.txt' File:**
+
+Once I successfully traverse directories, I can include the flag.txt file.
+
+```plaintext
+http://example.com/index.php?page=../../../../flag.txt
+```
+4. **Explanation :**
+
+- **../**: Move up one directory level.
+- **page=../../../flag.txt**: Traverse up three levels to the root directory and include the flag.txt file.
+
+5. **Result :**
+
+I've now successfully included the flag.txt file, allowing me to view its content or execute any malicious code it may contain.
