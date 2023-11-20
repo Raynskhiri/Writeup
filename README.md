@@ -2,11 +2,11 @@
 
 This writeup will guide you to solve the tasks:
 
-- [Server Side Template Injection](#server-side-template-injection)
-- [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
-- [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
+- [Server Side Template Injection](##server-side-template-injection)
+- [Local file inclusion 0 (LFI0)](##local-file-inclusion-(LFI0))
+- [Local file inclusion 1 (LFI1)](##local-file-inclusion-(LFI1))
 
-## Server Side Template Injection (#server-side-template-injection)
+## Server Side Template Injection 
 
 ### Confirmation of Jinja2 Usage
 
@@ -123,8 +123,7 @@ http://example.com/index.php?page=../../../../flag.txt
 
    I've now successfully included the flag.txt file, allowing me to view its content or execute any malicious code it may contain.
 
-## Local File Inclusion (LFI1) - Bypassing Filter (#local-file-inclusion-1-lfi1)
-
+## Local File Inclusion (LFI1) 
 ### Introduction
 
 Local File Inclusion (LFI) vulnerabilities can be exploited when user input is not properly sanitized, allowing attackers to include unauthorized files. In cases where filters are implemented to block certain traversal sequences like `"../"` attackers can attempt to bypass these filters using alternative techniques. One common filter evasion technique is to use variations of traversal sequences, such as `"....//"` or `"%2f,"` to trick the filtering mechanism and achieve directory traversal.
