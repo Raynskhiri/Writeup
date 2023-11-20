@@ -113,7 +113,7 @@ http://example.com/index.php?page=../../../../flag.txt
 4. **Explanation :**
 
 - **../**: Move up one directory level.
-- **page=../../../flag.txt**: Traverse up three levels to the root directory and include the flag.txt file.
+- **page=../../../../flag.txt**: Traverse up four levels to the root directory and include the flag.txt file.
 
 5. **Result :**
 
