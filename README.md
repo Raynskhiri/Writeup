@@ -75,3 +75,14 @@ After confirming the presence of SSTI in the web application, the next step is t
 - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
 
 <img src="img/8.png" alt="Payload 1" width="600" height="400">
+
+## Local File Inclusion (LFI0)
+
+### Confirmation of Local File Inclusion
+
+The title of this challenge, "Server Side Template Injection," coupled with the description, strongly suggests the use of the Jinja2 template engine in the web application.
+
+### What is a Local File Inclusion (LFI) vulnerability?
+
+> Local File Inclusion (LFI) allows an attacker to include files on a server through the web browser. This vulnerability exists when a web application includes a file without correctly sanitising the input, allowing and attacker to manipulate the input and inject path traversal characters and include other files from the web server.
+
