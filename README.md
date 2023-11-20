@@ -6,7 +6,7 @@ This writeup will guide you to solve the tasks:
 - [Local file inclusion 0 (LFI0)](#local-file-inclusion-0-lfi0)
 - [Local file inclusion 1 (LFI1)](#local-file-inclusion-1-lfi1)
 
-## Server Side Template Injection
+## Server Side Template Injection (#server-side-template-injection)
 
 ### Confirmation of Jinja2 Usage
 
@@ -78,7 +78,7 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 ## Local File Inclusion (LFI0)
 
-### Confirmation of Local File Inclusion
+### Confirmation of Local File Inclusion (#local-file-inclusion-0-lfi0)
 
  Confirmation of Local File Inclusion (LFI) is a crucial step in identifying and fixing vulnerabilities in web applications that use PHP. In LFI, attackers 
  exploit improper input validation to include unauthorized files. To confirm LFI, they might use traversal sequences like "../" or null bytes (%00) to navigate 
@@ -123,15 +123,15 @@ http://example.com/index.php?page=../../../../flag.txt
 
    I've now successfully included the flag.txt file, allowing me to view its content or execute any malicious code it may contain.
 
-## Local File Inclusion (LFI1) - Bypassing Filter
+## Local File Inclusion (LFI1) - Bypassing Filter (#local-file-inclusion-1-lfi1)
 
 ### Introduction
 
-Local File Inclusion (LFI) vulnerabilities can be exploited when user input is not properly sanitized, allowing attackers to include unauthorized files. In cases where filters are implemented to block certain traversal sequences like "../," attackers can attempt to bypass these filters using alternative techniques. One common filter evasion technique is to use variations of traversal sequences, such as "....//" or "%2f," to trick the filtering mechanism and achieve directory traversal.
+Local File Inclusion (LFI) vulnerabilities can be exploited when user input is not properly sanitized, allowing attackers to include unauthorized files. In cases where filters are implemented to block certain traversal sequences like `"../"` attackers can attempt to bypass these filters using alternative techniques. One common filter evasion technique is to use variations of traversal sequences, such as `"....//"` or `"%2f,"` to trick the filtering mechanism and achieve directory traversal.
 
 ### Supporting Argument
 
-Consider a PHP script that includes a file based on user input. A common security measure is to use `preg_replace` to filter out "../" from the user input, intending to prevent directory traversal.
+Consider a PHP script that includes a file based on user input. A common security measure is to use `preg_replace` to filter out `"../"` from the user input, intending to prevent directory traversal.
 
 ```php
 <?php
@@ -140,31 +140,32 @@ $file = $_GET['page'];
 $file = preg_replace('/\.\.\//', '', $file);
 include($file);
 ?>
-
+```
 ### Bypassing the Filter
 
 1. **Exploiting with "....//"**
 
-   If the filter is specifically looking for "../," an attacker can use variations like 
-   "....//" to bypass the filter.
+   If the filter is specifically looking for `"../"` an attacker can use variations like 
+   `"....//"` to bypass the filter.
 
 ```plaintext
 http://example.com/index.php?page=....//....//....//....//flag.txt
 ```
 2. **Exploiting with "%2f"**
 
-   URL encoding can also be used to bypass filters. In this case, the attacker can use "%2f" 
-   as an alternative to "/".
+   URL encoding can also be used to bypass filters. In this case, the attacker can use `"%2f"` 
+   as an alternative to `"/"`.
 
 ```plaintext
 http://example.com/index.php?page=..**%2f**..**%2f**..**%2f**..**%2f**flag.txt
 ```
 3. **Explanation:**
-   **Filter Bypass :** The variations "....//" and "%2f" are used to bypass the regular 
-     expression filter that replaces "../" in the user input. The filtering mechanism is 
+   **Filter Bypass :** The variations `"....//"` and `"%2f"` are used to bypass the regular 
+     expression filter that replaces `"../"` in the user input. The filtering mechanism is 
      fooled, allowing the traversal sequence to pass through.
 4. **Result**
-     By successfully bypassing the "../" filter, an attacker can include files outside of the 
+     By successfully bypassing the `"../"` filter, an attacker can include files outside of 
+     the 
      intended directory, potentially leading to unauthorized access and code execution. It's 
      crucial to regularly update and improve input validation mechanisms to defend against 
      evolving attack techniques.
