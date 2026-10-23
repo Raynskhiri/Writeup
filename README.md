@@ -1,6 +1,6 @@
 # SecuriNets ISI Friendly CTF 2023-2024
 
-This writeup will guide you to solve the tasks:
+Three web challenges from the Securinets ISI Friendly CTF (2023-2024), written up while I was a member of Securinets, with the fix a developer should ship at the end.
 
 - [Server Side Template Injection](#server-side-template-injection)
 - [Local file inclusion 0 (LFI0)](#local-file-inclusion-lfi0)
@@ -20,21 +20,19 @@ The title of this challenge, "Server Side Template Injection," coupled with the 
 
 ### Basic Jinja2 Injection Examples
 
-In your research, you've uncovered some basic examples of Jinja2 SSTI, including:
-
-- `{{4*4}}`: Evaluates to 16
+The quickest probe is an arithmetic expression: if `{{7*7}}` comes back as `49`, the input is being rendered by the template engine instead of printed as text.
 
 #### Exploit Test
 
 1. **Test Payload:** Jinja2 - Basic Injection Test.
 
-<img src="img/1.png" alt="Payload 1" width="600" height="400">
+<img src="img/1.png" alt="{{7*7}} probe typed into the input" width="600">
 
    *Description: `{{7*7}}`*
 
 2. **Test Result:** The application responds with the output of the '{{7*7}}' command.
 
-<img src="img/2.png" alt="Payload 1" width="600" height="400">
+<img src="img/2.png" alt="The page renders 49" width="600">
 
 ### SSTI Exploit for Remote Code Execution (RCE)
 
@@ -46,11 +44,11 @@ After confirming the presence of SSTI in the web application, the next step is t
 
 1. **Test Payload:** Exploit the SSTI by calling os.popen().read().
 
-   <img src="img/3.png" alt="Payload 1" width="600" height="400">
+   <img src="img/3.png" alt="os.popen('id') payload" width="600">
 
 2. **Test Result:** The application responds with the output of the 'id' command.
 
-   <img src="img/4.png" alt="Payload 1" width="600" height="400">
+   <img src="img/4.png" alt="Output of the id command" width="600">
 
    *Description: Confirm that the application responds with the output of the 'id' command, indicating successful SSTI execution.*
 
@@ -58,11 +56,11 @@ After confirming the presence of SSTI in the web application, the next step is t
 
    - **Payload:** Modify the payload to list the contents of the current directory using `ls`.
 
-   <img src="img/5.png" alt="Payload 1" width="600" height="400">
+   <img src="img/5.png" alt="ls payload" width="600">
 
    - **Test Result:** Execute the payload and observe the result to see the files and directories in the current location.
 
-   <img src="img/6.png" alt="Payload 1" width="600" height="400">
+   <img src="img/6.png" alt="Directory listing showing flag.txt" width="600">
 
 4. **Read Flag Contents**
    - **Payload:** Modify the payload to cat the contents of `flag.txt`.
@@ -71,11 +69,11 @@ After confirming the presence of SSTI in the web application, the next step is t
      {{ self.__init__.__globals__.__builtins__.__import__('os').popen('cat flag.txt').read() }}
      ```
 
-   <img src="img/7.png" alt="Payload 1" width="600" height="400">
+   <img src="img/7.png" alt="cat flag.txt payload" width="600">
 
    - **Test Result:** Execute the payload and observe the result to read the contents of the `flag.txt` file: `Securinets{55t1_D0N3}`.
 
-   <img src="img/8.png" alt="Payload 1" width="600" height="400">
+   <img src="img/8.png" alt="The flag rendered in the page" width="600">
 
 ## Local File Inclusion (LFI0)
 
@@ -96,7 +94,7 @@ Consider a PHP script that includes a file based on user input. If proper saniti
    ?>
    ```
 
-2. **Exploit Directory Traversal:** In the following examples we include the **/etc/passwd** file, check the Directory & Path Traversal chapter for more interesting files.
+2. **Exploit Directory Traversal:** The classic check is to include **/etc/passwd**, which exists on every Linux host.
 
    ```plaintext
    http://example.com/index.php?page=../../../etc/passwd
@@ -119,7 +117,7 @@ Consider a PHP script that includes a file based on user input. If proper saniti
 
 ### Introduction
 
-Local File Inclusion (LFI) vulnerabilities can be exploited when user input is not properly sanitized, allowing attackers to include unauthorized files. In cases where filters are implemented to block certain traversal sequences like `"../"` attackers can attempt to bypass these filters using alternative techniques. One common filter evasion technique is to use variations of traversal sequences, such as `"....//"` or `"%2f,"` to trick the filtering mechanism and achieve directory traversal.
+Local File Inclusion (LFI) vulnerabilities can be exploited when user input is not properly sanitized, allowing attackers to include unauthorized files. In cases where filters are implemented to block certain traversal sequences like `"../"` attackers can attempt to bypass these filters using alternative techniques. Here the filter strips `"../"` in a single pass, and a nested sequence such as `"....//"` survives it.
 
 ### Supporting Argument
 
@@ -142,12 +140,22 @@ include($file);
    http://example.com/index.php?page=....//....//....//....//flag.txt
    ```
 
-2. **Exploiting with "%2f"**: URL encoding can also be used to bypass filters. In this case, the attacker can use `"%2f"` as an alternative to `"/"`.
+2. **Why it works:** `preg_replace` scans the string once. In `....//` the middle `../` is removed, and the characters left on each side join into a new `../` that is never re-checked.
 
-   ```plaintext
-   http://example.com/index.php?page=..**%2f**..**%2f**..**%2f**..**%2f**flag.txt
-   ```
+3. **Why `%2f` does not help here:** PHP URL-decodes `$_GET` before the filter runs, so `..%2f` reaches `preg_replace` as `../` and is stripped like the plain version. Encoding tricks only work when the application decodes the input a second time after filtering.
 
-3. **Filter Bypass:** The variations `"....//"` and `"%2f"` are used to bypass the regular expression filter that replaces `"../"` in the user input. The filtering mechanism is fooled, allowing the traversal sequence to pass through.
+4. **Result**: The nested sequence restores the traversal, and the page includes `flag.txt` from outside the intended directory.
 
-4. **Result**: By successfully bypassing the `"../"` filter, an attacker can include files outside of the intended directory, potentially leading to unauthorized access and code execution. It's crucial to regularly update and improve input validation mechanisms to defend against evolving attack techniques.
+## The fix (both LFI challenges)
+
+Stripping characters is not a fix. Map the parameter to an allowlist instead, so user input never becomes a path:
+
+```php
+<?php
+$pages = ['home' => 'home.php', 'about' => 'about.php'];
+$page  = $_GET['page'] ?? 'home';
+include __DIR__ . '/pages/' . ($pages[$page] ?? 'home.php');
+?>
+```
+
+If the file names have to be dynamic, resolve the path with `realpath()` and refuse anything that does not start with the pages directory. For the SSTI challenge, the fix is to pass user input to the template as data (`render_template('page.html', name=name)`) and never build the template string from it.
